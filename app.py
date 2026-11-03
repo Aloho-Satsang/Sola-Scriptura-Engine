@@ -20,11 +20,7 @@ except Exception:
 st.markdown("---")
 
 # --- GEMINI CLIENT SETUP ---
-try:
-    api_key = st.secrets["GEMINI_API_KEY"]
-except Exception:
-    api_key = "AQ.Ab8RN6Jqc4AD-KIix8x9TKvFmhuPPf1LjarjUg5ridvrAocFMw" # Fallback key
-
+api_key = st.secrets["GEMINI_API_KEY"]
 client = genai.Client(api_key=api_key)
 
 # System Instruction defining the engine's strict exegetical rules
@@ -46,7 +42,6 @@ CORE OPERATIONAL RULES:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Display prior chat messages in the thread
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
@@ -57,7 +52,6 @@ if user_query := st.chat_input("Enter a scripture, word, or theological question
     with st.chat_message("user"):
         st.markdown(user_query)
 
-    # Generate response from Gemini
     with st.chat_message("assistant"):
         with st.spinner("Analyzing manuscripts and canonical context..."):
             try:
@@ -65,12 +59,13 @@ if user_query := st.chat_input("Enter a scripture, word, or theological question
                 for msg in st.session_state.messages:
                     formatted_contents.append(f"{msg['role'].upper()}: {msg['content']}")
                 
+                # Using standard flash model invocation
                 response = client.models.generate_content(
                     model='gemini-2.5-flash',
-                    config=genai.types.GenerateContentConfig(
-                        system_instruction=system_prompt,
-                    ),
                     contents="\n".join(formatted_contents),
+                    config={
+                        'system_instruction': system_prompt
+                    }
                 )
                 assistant_reply = response.text
             except Exception as e:
