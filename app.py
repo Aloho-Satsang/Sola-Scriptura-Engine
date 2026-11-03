@@ -11,7 +11,7 @@ st.set_page_config(
 
 # --- HEADER IMAGE DISPLAY ---
 try:
-    st.image("header.png", use_container_width=True)
+    st.image("1793710934178.jpg", use_container_width=True)
 except Exception:
     st.title("📖 Sola Scriptura Exegetical Engine")
     st.markdown("### Direct Bible Study in Original Languages & Context")
