@@ -59,9 +59,9 @@ if user_query := st.chat_input("Enter a scripture, word, or theological question
                 for msg in st.session_state.messages:
                     formatted_contents.append(f"{msg['role'].upper()}: {msg['content']}")
                 
-                # Using the rock-solid, production-stable 1.5 endpoint
+                # Using the stable production model string for the v1beta endpoint
                 response = client.models.generate_content(
-                    model='gemini-1.5-flash',
+                    model='gemini-3.6-flash',
                     contents="\n".join(formatted_contents),
                     config={
                         'system_instruction': system_prompt
